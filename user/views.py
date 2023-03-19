@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from .models import MobileOTP
 import uuid
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta
 from rest_framework.response import Response
 from django.utils import timezone
 from django.contrib.auth.models import User
