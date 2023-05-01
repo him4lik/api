@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'tracker',
     'user',
     'inventory',
-    'simple_history'
+    'simple_history',
+    'django_extensions'
 ]
 
 MIDDLEWARE = [

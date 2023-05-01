@@ -28,19 +28,29 @@ class Variant(BaseModel):
 	price = models.IntegerField()
 	stock_quantity = models.IntegerField()
 	sold_quantity = models.IntegerField()
-	parameters_value = models.JSONField(default=dict, blank=True)
 	categories = models.ManyToManyField(Category)
 	file = models.FileField(upload_to='videos/', null=True, blank=True)
 
 	def save(self, *args, **kwargs):
 		for parameter in self.product.parameters:
 			try:
-				self.parameters_value[parameter]
+				self.varparam_set.filter(parameter=parameter)
 			except:
-				self.parameters_value[parameter]=''
+				VarParam.objects.create(
+					parameter = parameter,
+					value = None,
+					variant = self
+					)
 		super(Variant, self).save(*args, **kwargs)
 
 	def __str__(self):
 		return str(self.title)
 
 
+class VarParam(BaseModel):
+	parameter = models.CharField(max_length=15)
+	value = models.CharField(max_length=20)
+	variant = models.ForeignKey(Variant, on_delete=models.CASCADE)
+
+	def __str__(self):
+		return self.variant.title

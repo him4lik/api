@@ -2,6 +2,16 @@ from django.db import models
 from django.contrib.auth.models import User
 from lib.base_classes import BaseModel
 import random
+from lib.validators import pin_validator
+from django.core.exceptions import ValidationError
+from api.config import States
+
+
+def validate_pin(value):
+    if not pin_validator(value):
+        raise ValidationError(
+            _('Invalid Pin Code')
+        )
 
 class BaseOTPModel(BaseModel):
     is_verified = models.BooleanField(blank=False, default=False)
@@ -58,7 +68,23 @@ class Profile(BaseModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=15)
     last_name = models.CharField(max_length=15)
+    email = models.CharField(max_length=40, default='')
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
+
+class Address(BaseModel):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    address = models.CharField(max_length=60)
+    city = models.CharField(max_length=255)
+    state = models.CharField(
+        max_length=2,
+        choices=[(x.name, x.value) for x in States]
+    )
+    pin = models.CharField(
+        max_length=6,
+        validators=[validate_pin],
+    )
+    landmark = models.TextField(max_length=1023, default='', blank=True, null=True)
+    # location = PointField(null=True, blank=True)

@@ -25,40 +25,32 @@ class ProductFilterView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        product_name = request.query_params.get('product', None)
-        category = request.query_params.get('category', None)
-        parameters = request.query_params.get('parameters', None)
-        title = request.query_params.get('title', None)
+        product_name = request.query_params.get('product', '')
+        category = request.query_params.get('category', '')
+        title = request.query_params.get('title', '')
+        parameters = request.query_params.get('parameters', '')
         variants = Variant.objects.filter(product__name=product_name, categories__name=category)
-        if parameters:
-            variants=variants.filter(parameters_value=eval(parameters.replace("'", "\"")))
+        var_params = [set(p.parameter for p in var.varparam_set.all()) for var in variants]
+        var_params = sorted(list(set.intersection(*var_params)))
+        filter_opts = {}
+        for p in var_params:
+            filter_opts[p] = []
+            for var in variants:
+                filter_opts[p].append(var.varparam_set.get(parameter=p).value)
         if title:
             variants=variants.filter(title=title)
-        data = []
+        if  parameters:
+            for k, v in eval(parameters).items():
+                variants = variants.filter(varparam__parameter=k,varparam__value__in=v)
+        data = {'variants':[], 'filter_opts':filter_opts}
         for var in variants:
-            data.append({
+            var_params = {p.parameter:p.value for p in var.varparam_set.all()}
+            data['variants'].append({
                 'product':product_name,
                 'category':category,
                 'title':var.title,
                 'price':var.price, 
                 'stock':var.stock_quantity, 
-                'parameters':var.parameters_value,
-                'video':'http://127.0.0.1:8000'+var.file.url})
+                'parameters':var_params,
+                'video':'http://127.0.0.1:8000'+var.file.url if var.file else None})
         return Response(data)
-
-    def post(self, request):
-        request_id = request.data['request_id']
-        otp = request.data['otp']
-        res = verify_otp(request_id, otp)
-        if res:
-            return Response(res['text'], status=res['status'])
-
-        otp = MobileOTP.objects.get(request_id=request_id)
-        flag = False
-        user_obj = get_user(otp.username, True)
-        refresh = RefreshToken.for_user(user_obj)
-        print(refresh)
-        return Response({
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
-        })
