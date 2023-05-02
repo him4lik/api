@@ -1,13 +1,14 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
-from .models import MobileOTP
+from .models import MobileOTP, Profile, Address
 import uuid
 from datetime import datetime, timedelta
 from rest_framework.response import Response
 from django.utils import timezone
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.db import transaction
 
 def get_user(mobile, is_active):
     try:
@@ -17,10 +18,12 @@ def get_user(mobile, is_active):
             user.save()
 
     except User.DoesNotExist:
-        user = User.objects.create_user(username=mobile)
-        user.is_active = is_active
-        user.save()
-
+        with transaction.atomic():
+            user = User.objects.create_user(username=mobile)
+            user.is_active = is_active
+            user.save()
+            profile = Profile(user=user)
+            profile.save()
     return user
 
 class WhiteListUser(APIView):
@@ -150,8 +153,7 @@ class GetUserView(APIView):
             data = {
                 "is_authenticated":True,
                 "username":user.username,
-                "first_name":profile.first_name,
-                "last_name":profile.last_name
+                "name":profile.name,
                 }
         else:
             data={"is_authenticated":False}
