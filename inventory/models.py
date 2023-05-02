@@ -32,16 +32,16 @@ class Variant(BaseModel):
 	file = models.FileField(upload_to='videos/', null=True, blank=True)
 
 	def save(self, *args, **kwargs):
+		super(Variant, self).save(*args, **kwargs)
 		for parameter in self.product.parameters:
 			try:
 				self.varparam_set.filter(parameter=parameter)
 			except:
 				VarParam.objects.create(
 					parameter = parameter,
-					value = None,
 					variant = self
 					)
-		super(Variant, self).save(*args, **kwargs)
+		
 
 	def __str__(self):
 		return str(self.title)
@@ -49,7 +49,7 @@ class Variant(BaseModel):
 
 class VarParam(BaseModel):
 	parameter = models.CharField(max_length=15)
-	value = models.CharField(max_length=20)
+	value = models.CharField(max_length=20, null=True, blank=True)
 	variant = models.ForeignKey(Variant, on_delete=models.CASCADE)
 
 	def __str__(self):
