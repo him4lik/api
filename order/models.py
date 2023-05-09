@@ -12,8 +12,8 @@ class Cart(BaseModel):
     	return str(self.user.username)
 
 class CartItem(BaseModel):
-	variant = models.ForeignKey(Variant, on_delete=models.CASCADE)
-	cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+	variant = models.OneToOneField(Variant, on_delete=models.CASCADE)
+	cart = models.OneToOneField(Cart, on_delete=models.CASCADE)
 	quantity = models.IntegerField()
 
 	def __str__(self):
