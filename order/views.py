@@ -11,6 +11,22 @@ from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.core.files.base import ContentFile
 
+def add_to_cart(user, variant_id, quantity=1):
+	try:
+		variant = Variant.objects.get(id=variant_id)
+	except:
+		return 
+	try:
+		cart = Cart.objects.get(user=user)
+	except:
+		Cart.objects.create(user=user)
+	CartItem.objects.create(
+		variant=variant,
+		cart=cart,
+		quantity=quantity
+		)
+
+
 class CartView(APIView):
     permission_classes = [AllowAny]
 
@@ -28,4 +44,12 @@ class CartView(APIView):
     	return Response(data)
 
     def post(self, request):
-    	pass
+    	variant_id = request.data.get("variant_id", '')
+    	try:
+    		cart = Cart.objects.get(user=user)
+    	except:
+    		cart = Cart.objects.create(user=user)
+    	try:
+    		variant = cart.variants.get(id=variant_id)
+    	except:
+    		add_to_cart(request.user, variant_id)
