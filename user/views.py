@@ -136,7 +136,7 @@ class LoginOTPView(APIView):
         flag = False
         user_obj = get_user(otp.username, True)
         refresh = RefreshToken.for_user(user_obj)
-        print(refresh)
+        
         return Response({
             'refresh': str(refresh),
             'access': str(refresh.access_token),

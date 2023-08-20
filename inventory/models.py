@@ -6,6 +6,7 @@ from django.contrib.postgres.fields import ArrayField
 class Product(BaseModel):
 	name = models.CharField(max_length=20)
 	parameters = ArrayField(models.CharField(max_length=30), default=list)
+	description = models.CharField(max_length=100, default='')
 	
 	def get_product_id(self):
 		return ProductChoices[self.name].value

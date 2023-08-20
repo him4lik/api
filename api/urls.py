@@ -29,5 +29,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('user/', include('user.urls')),
     path('inventory/', include('inventory.urls')),
-    path('sentry-debug/', trigger_error)
+    path('sentry-debug/', trigger_error),
+    path('order/', include('order.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
