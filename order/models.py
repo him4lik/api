@@ -5,15 +5,15 @@ import random
 from inventory.models import Variant
 
 class Cart(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     variants = models.ManyToManyField(Variant, blank=True, related_name='carts', through='CartItem')
 
     def __str__(self):
     	return str(self.user.username)
 
 class CartItem(BaseModel):
-	variant = models.OneToOneField(Variant, on_delete=models.CASCADE)
-	cart = models.OneToOneField(Cart, on_delete=models.CASCADE)
+	variant = models.ForeignKey(Variant, on_delete=models.CASCADE)
+	cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
 	quantity = models.IntegerField()
 	is_active = models.BooleanField(default=True)
 
