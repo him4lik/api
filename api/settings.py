@@ -90,8 +90,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'ankit',
+        'USER':'ankit',
         'PASSWORD': 'google123',
-        'HOST':'/var/run/postgresql'
+        'HOST':'postgres'
     }
 }
 
