@@ -1,5 +1,5 @@
 FROM postgres:14.8
-ENV POSTGRES_USER=ankit
+ENV POSTGRES_USER=ubuntu
 ENV POSTGRES_PASSWORD=google123
 ENV PGDATA=/data
 RUN apt-get update && apt-get install -y postgis postgresql-14-postgis-3

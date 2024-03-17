@@ -89,8 +89,8 @@ WSGI_APPLICATION = 'api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ankit',
-        'USER':'ankit',
+        'NAME': 'inditan',
+        'USER':'ubuntu',
         'PASSWORD': 'google123',
         'HOST':'postgres'
     }
