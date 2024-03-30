@@ -86,13 +86,18 @@ WSGI_APPLICATION = 'api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+DB_NAME = os.environ['DB_NAME']
+DB_USER = os.environ['DB_USER']
+DB_PASSWORD = os.environ['DB_PASSWORD']
+DB_HOST = os.environ['DB_HOST']
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'inditan',
-        'USER':'ubuntu',
-        'PASSWORD': 'google123',
-        'HOST':'postgres'
+        'NAME': DB_NAME,
+        'USER':DB_USER,
+        'PASSWORD': DB_PASSWORD,
+        'HOST':DB_HOST
     }
 }
 
