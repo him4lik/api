@@ -1,0 +1,11 @@
+FROM python:3.7-bullseye
+ENV PYTHONUNBUFFERED 1
+RUN apt-get update && apt-get install -y tesseract-ocr postgresql-client #libpq-dev binutils libproj-dev gdal-bin wkhtmltopdf
+RUN mkdir /code
+WORKDIR /code
+COPY requirements.txt /code/
+RUN python3 -m pip install --upgrade pip
+RUN pip install -r requirements.txt
+RUN find . -type f -name "celerybeat.pid" -exec rm -f {} \;
+COPY . /code/
+ENTRYPOINT celery -A api beat --loglevel=debug

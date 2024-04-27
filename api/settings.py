@@ -30,8 +30,7 @@ SECRET_KEY = 'django-insecure-+*&an^leu_3nq!295i0w=_8-8)d_j=#o9*$0f!$m)rlzi02iif
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '172.19.0.3', 'api']
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -189,12 +188,14 @@ USE_I18N = True
 
 USE_TZ = True
 
-
+PATH_SPEC = os.environ['PATH_SPEC']
+PATH_PREFIX = f"api/{PATH_SPEC}/"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 MEDIA_ROOT = os.path.join(BASE_DIR, 'prod/vid/')
 MEDIA_URL = '/vid/'
 STATIC_URL = '/static/'
+STATIC_ROOT = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

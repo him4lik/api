@@ -21,14 +21,15 @@ from rest_framework_simplejwt.views import (
 )
 from django.conf.urls.static import static
 from . import settings
+from .settings import PATH_PREFIX
 
 def trigger_error(request):
     division_by_zero = 1 / 0
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('user/', include('user.urls')),
-    path('inventory/', include('inventory.urls')),
-    path('sentry-debug/', trigger_error),
-    path('order/', include('order.urls'))
+    path(PATH_PREFIX+'admin/', admin.site.urls),
+    path(PATH_PREFIX+'user/', include('user.urls')),
+    path(PATH_PREFIX+'inventory/', include('inventory.urls')),
+    path(PATH_PREFIX+'sentry-debug/', trigger_error),
+    path(PATH_PREFIX+'order/', include('order.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

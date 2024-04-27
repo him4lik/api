@@ -12,4 +12,3 @@ COPY . /code
 EXPOSE 8000
 # Executes the command directly without involving a shell 
 CMD ["./start_server.sh"]
-
