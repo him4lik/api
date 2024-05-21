@@ -103,6 +103,7 @@ class LoginOTPView(APIView):
 
     def get(self, request):
         phone = request.query_params.get('phone')
+        print(request.query_params)
         try:
             otp = MobileOTP.objects.get(username=phone)
         except MobileOTP.DoesNotExist:
@@ -147,7 +148,7 @@ class GetUserView(APIView):
 
     def get(self, request):
         user = request.user
-        print(user)
+        print(request.__dict__)
         if user.is_authenticated:
             profile = user.profile
             data = {
