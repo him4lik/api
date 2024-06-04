@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-+*&an^leu_3nq!295i0w=_8-8)d_j=#o9*$0f!$m)rlzi02iif
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '172.19.0.3', 'api']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '172.18.0.1', 'api']
 
 
 # Application definition
@@ -49,12 +49,14 @@ INSTALLED_APPS = [
     'user',
     'inventory',
     'simple_history',
-    'django_extensions'
+    'django_extensions',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -157,6 +159,9 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=60),
 }
 
+PATH_SPEC = os.environ['PATH_SPEC']
+PATH_PREFIX = f"api/{PATH_SPEC}/"
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -195,8 +200,11 @@ USE_TZ = True
 MEDIA_ROOT = os.path.join(BASE_DIR, 'prod/vid/')
 MEDIA_URL = '/vid/'
 STATIC_URL = '/static/'
+STATIC_ROOT = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CORS_ALLOW_ALL_ORIGINS=True
