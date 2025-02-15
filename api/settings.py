@@ -208,3 +208,14 @@ STATIC_ROOT = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS=True
+
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+
+# Backend (for storing task results, optional)
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+
+# Serializer (optional)
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+CELERY_IMPORTS = []
