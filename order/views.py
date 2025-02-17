@@ -17,14 +17,11 @@ def modify_cart(user, variant_id, decision, quantity=1):
 		variant = Variant.objects.get(id=variant_id)
 	except:
 		return 
-	print('vfdv')
 	try:
 		cart = Cart.objects.get(user=user)
 	except:
 		cart = Cart.objects.create(user=user)
-	print('ffffffffffff')
 	try:
-		print('nnnnnn')
 		cart_item = CartItem.objects.get(
 			variant = variant,
 			cart=cart,
@@ -36,16 +33,12 @@ def modify_cart(user, variant_id, decision, quantity=1):
 		if cart_item.quantity < 0:
 			cart_item.quantity = 0
 		cart_item.save()
-		print('lllllll')
 	except:
-		print('qqqqqqqqqqqq', variant, cart, quantity)
 		CartItem.objects.create(
 			variant=variant,
 			cart=cart,
 			quantity=quantity
 			)
-		print('mmmmmmmm')
-
 
 class CartView(APIView):
     permission_classes = [AllowAny]

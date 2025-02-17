@@ -30,7 +30,6 @@ class ProductFilterView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        print(request.query_params, "**********")
         product_name = request.query_params.get('product', '')
         category = request.query_params.get('category', '')
         title = request.query_params.get('title', '')
@@ -50,13 +49,11 @@ class ProductFilterView(APIView):
         if title:
             variants=variants.filter(title=title)
         if  parameters:
-            print(parameters, '///////////////')
             for k, v in eval(parameters).items():
                 variants = variants.filter(varparam__parameter=k,varparam__value__in=v)
         data = {'variants':[], 'filter_opts':filter_opts}
         for var in variants:
             var_params = {p.parameter:p.value for p in var.varparam_set.all()}
-            print(request.user, request.user.is_authenticated)
             cart_items = CartItem.objects.filter(variant=var, cart__user=request.user) if request.user.is_authenticated else [] 
             data['variants'].append({
                 'variant_id': var.id,
@@ -69,5 +66,4 @@ class ProductFilterView(APIView):
                 'parameters':var_params,
                 'video':'http://127.0.0.1:8000'+var.file.url if var.file else None,
                 'cart_quantity': cart_items.last().quantity if cart_items else 0})
-            print(data)
         return Response(data)
